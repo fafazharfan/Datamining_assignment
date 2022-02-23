@@ -49,13 +49,6 @@ X = vectorizer.fit_transform(docs)
 df = pd.DataFrame(X.T.toarray(), index=vectorizer.get_feature_names())
 docs = getdocs()
 
-# Create Term-Document Matrix with TF-IDF weighting
-vectorizer = TfidfVectorizer()
-X = vectorizer.fit_transform(docs)
-
-# Create a DataFrame
-df = pd.DataFrame(X.T.toarray(), index=vectorizer.get_feature_names())
-
 def get_similar_articles(q, df):
   print("query:", q)
   print("Berikut artikel dengan nilai cosine similarity tertinggi: ")
