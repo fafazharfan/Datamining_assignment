@@ -26,7 +26,7 @@ def getdocs():
           sen.append(i.text)
       documents.append(' '.join(sen))
 
-  # Clean Paragraphs
+  # Cleaning up Paragraphs
   doc_clean = []
   for d in documents:
       doc_test = re.sub(r'[^\x00-\x7F]+', ' ', d)
@@ -51,7 +51,7 @@ docs = getdocs()
 
 def get_similar_articles(q, df):
   print("query:", q)
-  print("Berikut artikel dengan nilai cosine similarity tertinggi: ")
+  print("Most similar article (cosine value): ")
   q = [q]
   q_vec = vectorizer.transform(q).toarray().reshape(df.shape[0],)
   sim = {}
@@ -65,7 +65,7 @@ def get_similar_articles(q, df):
       print(docs[k])
       print()
 
-q1 = 'barcelona'
+q1 = 'covid'
 
 get_similar_articles(q1, df)
 print('-'*100)
