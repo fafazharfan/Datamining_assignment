@@ -11,24 +11,24 @@ def getdocs():
   soup = BeautifulSoup(r.content, 'html.parser')
 
   link = []
-  for i in soup.find('div', {'class':'most__wrap'}).find_all('a'):
+  for i in soup.find('div', {'class': 'most__wrap'}).find_all('a'):
       i['href'] = i['href'] + '?page=all'
       link.append(i['href'])
 
-# Retrieve Paragraphs
-  documents = []
+# Getting the paragraphs
+  doc = []
   for i in link:
       r = requests.get(i)
       soup = BeautifulSoup(r.content, 'html.parser')
 
       sen = []
-      for i in soup.find('div', {'class':'read__content'}).find_all('p'):
+      for i in soup.find('div', {'class': 'read__content'}).find_all('p'):
           sen.append(i.text)
-      documents.append(' '.join(sen))
+      doc.append(' '.join(sen))
 
-  # Cleaning up Paragraphs
+  # Cleaning up paragraphs
   doc_clean = []
-  for d in documents:
+  for d in doc:
       doc_test = re.sub(r'[^\x00-\x7F]+', ' ', d)
       doc_test = re.sub(r'@\w+', '', doc_test)
       doc_test = doc_test.lower()
@@ -41,16 +41,16 @@ def getdocs():
 
 docs = getdocs()
 
-# Create Term-Document Matrix with TF-IDF weighting
+# TF-IDF weighting
 vectorizer = TfidfVectorizer()
 X = vectorizer.fit_transform(docs)
 
-# Create a DataFrame
-df = pd.DataFrame(X.T.toarray(), index=vectorizer.get_feature_names())
+# Creating dataFrame
+df = pd.DataFrame(X.y.toarray(), index=vectorizer.get_feature_names())
 docs = getdocs()
 
-def get_similar_articles(q, df):
-  print("query:", q)
+def getArticles(q, df):
+  print("Search term:", q)
   print("Most similar article (cosine value): ")
   q = [q]
   q_vec = vectorizer.transform(q).toarray().reshape(df.shape[0],)
@@ -65,7 +65,7 @@ def get_similar_articles(q, df):
       print(docs[k])
       print()
 
-q1 = 'covid'
+terms = 'covid-19'
 
-get_similar_articles(q1, df)
+getArticles(terms, df)
 print('-'*100)
