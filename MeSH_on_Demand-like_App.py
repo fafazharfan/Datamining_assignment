@@ -46,14 +46,13 @@ vectorizer = TfidfVectorizer()
 X = vectorizer.fit_transform(docs)
 
 # Creating dataFrame
-df = pd.DataFrame(X.y.toarray(), index=vectorizer.get_feature_names())
+df = pd.DataFrame(X.T.toarray(), index=vectorizer.get_feature_names())
 docs = getdocs()
 
 def getArticles(q, df):
   print("Search term:", q)
-  print("Most similar article (cosine value): ")
   q = [q]
-  q_vec = vectorizer.transform(q).toarray().reshape(df.shape[0],)
+  q_vec = vectorizer.transform(q).toarray().reshape(df.shape[0])
   sim = {}
   for i in range(10):
     sim[i] = np.dot(df.loc[:, i].values, q_vec) / np.linalg.norm(df.loc[:, i]) * np.linalg.norm(q_vec)
@@ -62,6 +61,7 @@ def getArticles(q, df):
   
   for k, v in sim_sorted:
     if v != 0.0:
+      print("Similar article (cosine sim. value): ", v)
       print(docs[k])
       print()
 
